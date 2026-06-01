@@ -8,7 +8,34 @@
     return `${mm}:${ss}`;
   }
 
-  const api = { formatTime };
+  function parseRow(row) {
+    const avatar = row.querySelector('img');
+    if (!avatar) return null;
+    const children = Array.from(row.children);
+    const headerEl = children.find((c) => c.contains(avatar));
+    const textEl = children.find((c) => !c.contains(avatar));
+    const speakerEl = headerEl ? headerEl.querySelector('span') : null;
+    const speaker = speakerEl ? speakerEl.textContent.trim() : '';
+    const text = textEl ? textEl.textContent.trim() : '';
+    if (!speaker || !text) return null;
+    return { speaker, text };
+  }
+
+  function getCaptionRows(container) {
+    return Array.from(container.children).filter((child) => parseRow(child) !== null);
+  }
+
+  function findCaptionsContainer(rootDoc) {
+    const byLabel = rootDoc.querySelector('[aria-label="Captions"]');
+    if (byLabel) return byLabel;
+    const regions = rootDoc.querySelectorAll('[role="region"]');
+    for (const region of regions) {
+      if (getCaptionRows(region).length > 0) return region;
+    }
+    return null;
+  }
+
+  const api = { formatTime, parseRow, getCaptionRows, findCaptionsContainer };
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = api;
