@@ -74,8 +74,40 @@
     });
   }
 
-  function updateButton() {}
+  function download() {
+    const now = new Date();
+    const pad = (n) => String(n).padStart(2, '0');
+    const date = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(
+      now.getDate()
+    )} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+    const participants = [...new Set(state.records.map((r) => r.speaker))];
+    const text = core.buildTranscript(state.records, { date, participants });
 
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const stamp = date.replace(/[: ]/g, '-');
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `meet-transcript-${stamp}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function createButton() {
+    const btn = document.createElement('button');
+    btn.id = 'mce-download-btn';
+    btn.textContent = '⬇ Transcript (0)';
+    btn.addEventListener('click', download);
+    document.body.appendChild(btn);
+    return btn;
+  }
+
+  function updateButton() {
+    if (!state.button) state.button = createButton();
+    state.button.textContent = `⬇ Transcript (${state.records.length})`;
+  }
+
+  updateButton();
   restore();
   setInterval(tryAttach, 1000);
 
