@@ -11,10 +11,25 @@
     button: null,
   };
 
+  let persistTimer = null;
+
+  function flushPersist() {
+    chrome.storage.local.set(
+      { meetTranscript: { t0: state.t0, records: state.records } },
+      () => {
+        if (chrome.runtime.lastError) {
+          console.warn('[mce] persist failed:', chrome.runtime.lastError.message);
+        }
+      }
+    );
+  }
+
   function persist() {
-    chrome.storage.local.set({
-      meetTranscript: { t0: state.t0, records: state.records },
-    });
+    if (persistTimer !== null) return;
+    persistTimer = setTimeout(() => {
+      persistTimer = null;
+      flushPersist();
+    }, 1000);
   }
 
   function ingest() {
@@ -111,6 +126,7 @@
   restore();
   setInterval(tryAttach, 1000);
 
+  // Debug handles for manual inspection from the DevTools console.
   self.__mceState = state;
   self.__mceIngest = ingest;
 })();
