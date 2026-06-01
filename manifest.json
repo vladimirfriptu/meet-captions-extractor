@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Meet Captions Extractor",
+  "version": "1.0.0",
+  "description": "Records Google Meet live captions and downloads them as a .txt transcript.",
+  "permissions": ["storage"],
+  "content_scripts": [
+    {
+      "matches": ["https://meet.google.com/*"],
+      "js": ["core.js", "content.js"],
+      "css": ["styles.css"],
+      "run_at": "document_idle"
+    }
+  ]
+}
