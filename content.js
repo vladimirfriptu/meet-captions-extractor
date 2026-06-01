@@ -8,7 +8,6 @@
     nextId: 1,
     container: null,
     observer: null,
-    button: null,
   };
 
   let persistTimer = null;
@@ -53,7 +52,6 @@
       }
     }
     persist();
-    updateButton();
   }
 
   function tryAttach() {
@@ -85,44 +83,21 @@
       state.t0 = saved.t0;
       state.records = saved.records || [];
       state.nextId = state.records.reduce((m, r) => Math.max(m, r.id), 0) + 1;
-      updateButton();
     });
   }
 
-  function download() {
-    const now = new Date();
-    const pad = (n) => String(n).padStart(2, '0');
-    const date = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(
-      now.getDate()
-    )} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
-    const participants = [...new Set(state.records.map((r) => r.speaker))];
-    const text = core.buildTranscript(state.records, { date, participants });
-
-    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const stamp = date.replace(/[: ]/g, '-');
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `meet-transcript-${stamp}.txt`;
-    a.click();
-    URL.revokeObjectURL(url);
+  function reset() {
+    state.records = [];
+    state.nodeToId = new WeakMap();
+    state.nextId = 1;
+    state.t0 = state.container ? Date.now() : null;
+    flushPersist();
   }
 
-  function createButton() {
-    const btn = document.createElement('button');
-    btn.id = 'mce-download-btn';
-    btn.textContent = '⬇ Transcript (0)';
-    btn.addEventListener('click', download);
-    document.body.appendChild(btn);
-    return btn;
-  }
+  chrome.runtime.onMessage.addListener((msg) => {
+    if (msg && msg.type === 'mce-reset') reset();
+  });
 
-  function updateButton() {
-    if (!state.button) state.button = createButton();
-    state.button.textContent = `⬇ Transcript (${state.records.length})`;
-  }
-
-  updateButton();
   restore();
   setInterval(tryAttach, 1000);
 

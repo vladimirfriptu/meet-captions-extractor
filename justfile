@@ -7,7 +7,7 @@ version := `node -p "require('./manifest.json').version"`
 name := "meet-captions-extractor"
 
 # Runtime files shipped to users (no tests, no dev/config files)
-ship := "manifest.json core.js content.js styles.css README.md"
+ship := "manifest.json core.js content.js popup.html popup.css popup.js README.md"
 
 # Show available recipes
 default:

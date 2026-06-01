@@ -1,0 +1,113 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  width: 360px;
+  margin: 0;
+  font: 13px/1.4 Roboto, Arial, sans-serif;
+  color: #202124;
+  background: #fff;
+}
+
+header {
+  padding: 12px 14px 8px;
+  border-bottom: 1px solid #e8eaed;
+}
+
+h1 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.status {
+  display: block;
+  margin-top: 2px;
+  font-size: 11px;
+  color: #5f6368;
+}
+
+.messages {
+  list-style: none;
+  margin: 0;
+  padding: 8px 14px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.messages:empty::after {
+  content: "No captions recorded yet.";
+  color: #9aa0a6;
+  font-style: italic;
+}
+
+.messages li {
+  padding: 4px 0;
+  border-bottom: 1px solid #f1f3f4;
+  word-break: break-word;
+}
+
+.messages li:last-child {
+  border-bottom: none;
+}
+
+.time {
+  margin-right: 6px;
+  color: #9aa0a6;
+  font-variant-numeric: tabular-nums;
+}
+
+.speaker {
+  margin-right: 4px;
+  font-weight: 500;
+}
+
+.speaker::after {
+  content: ":";
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  padding: 10px 14px;
+  border-top: 1px solid #e8eaed;
+}
+
+.btn {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid #dadce0;
+  border-radius: 6px;
+  background: #fff;
+  color: #1a73e8;
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: #f8f9fa;
+}
+
+.btn:disabled {
+  background: #fff;
+  color: #9aa0a6;
+  cursor: default;
+}
+
+.btn--primary {
+  border-color: #1a73e8;
+  background: #1a73e8;
+  color: #fff;
+}
+
+.btn--primary:hover {
+  background: #1b66c9;
+}
+
+.btn--primary:disabled {
+  border-color: #e8eaed;
+  background: #e8eaed;
+  color: #9aa0a6;
+}
