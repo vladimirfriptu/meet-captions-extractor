@@ -72,3 +72,19 @@ test('getCaptionRows returns only valid caption rows', () => {
   const rows = core.getCaptionRows(container);
   assert.strictEqual(rows.length, 2);
 });
+
+test('buildTranscript renders header and lines', () => {
+  const records = [
+    { id: 1, speaker: 'Oleksii Kuzmenko', text: 'hello', t: 0 },
+    { id: 2, speaker: 'Viktor Morshch', text: 'world', t: 23000 },
+  ];
+  const meta = {
+    date: '2026-06-01 14:32',
+    participants: ['Oleksii Kuzmenko', 'Viktor Morshch'],
+  };
+  const out = core.buildTranscript(records, meta);
+  assert.ok(out.includes('# Meet transcript — 2026-06-01 14:32'));
+  assert.ok(out.includes('# Participants: Oleksii Kuzmenko, Viktor Morshch'));
+  assert.ok(out.includes('[00:00] Oleksii Kuzmenko: hello'));
+  assert.ok(out.includes('[00:23] Viktor Morshch: world'));
+});

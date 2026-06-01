@@ -35,7 +35,19 @@
     return null;
   }
 
-  const api = { formatTime, parseRow, getCaptionRows, findCaptionsContainer };
+  function buildTranscript(records, meta) {
+    const headerLines = [
+      `# Meet transcript — ${meta.date}`,
+      `# Participants: ${meta.participants.join(', ')}`,
+      '',
+    ];
+    const bodyLines = records.map(
+      (r) => `[${formatTime(r.t)}] ${r.speaker}: ${r.text}`
+    );
+    return headerLines.concat(bodyLines).join('\n') + '\n';
+  }
+
+  const api = { formatTime, parseRow, getCaptionRows, findCaptionsContainer, buildTranscript };
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = api;
