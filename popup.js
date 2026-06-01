@@ -47,20 +47,12 @@ function render(records) {
 function download() {
   getRecords((records) => {
     if (!records.length) return;
-    const now = new Date();
-    const pad = (n) => String(n).padStart(2, '0');
-    const date = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(
-      now.getDate()
-    )} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
-    const participants = [...new Set(records.map((r) => r.speaker))];
-    const text = core.buildTranscript(records, { date, participants });
-
-    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const result = core.buildDownload(records, new Date());
+    const blob = new Blob([result.content], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(blob);
-    const stamp = date.replace(/[: ]/g, '-');
     const a = document.createElement('a');
     a.href = url;
-    a.download = `meet-transcript-${stamp}.txt`;
+    a.download = result.filename;
     a.click();
     URL.revokeObjectURL(url);
   });

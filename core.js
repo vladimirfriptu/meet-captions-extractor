@@ -47,7 +47,26 @@
     return headerLines.concat(bodyLines).join('\n') + '\n';
   }
 
-  const api = { formatTime, parseRow, getCaptionRows, findCaptionsContainer, buildTranscript };
+  function buildDownload(records, now) {
+    const pad = (n) => String(n).padStart(2, '0');
+    const date = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(
+      now.getDate()
+    )} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+    const participants = [...new Set(records.map((r) => r.speaker))];
+    const content = buildTranscript(records, { date, participants });
+    const stamp = date.replace(/[: ]/g, '-');
+    const filename = `meet-transcript-${stamp}.txt`;
+    return { filename, content };
+  }
+
+  const api = {
+    formatTime,
+    parseRow,
+    getCaptionRows,
+    findCaptionsContainer,
+    buildTranscript,
+    buildDownload,
+  };
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = api;

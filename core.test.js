@@ -88,3 +88,15 @@ test('buildTranscript renders header and lines', () => {
   assert.ok(out.includes('[00:00] Oleksii Kuzmenko: hello'));
   assert.ok(out.includes('[00:23] Viktor Morshch: world'));
 });
+
+test('buildDownload builds a timestamped filename and transcript content', () => {
+  const records = [
+    { id: 1, speaker: 'Oleksii Kuzmenko', text: 'hello', t: 0 },
+    { id: 2, speaker: 'Viktor Morshch', text: 'world', t: 23000 },
+  ];
+  const now = new Date(2026, 5, 1, 14, 32);
+  const result = core.buildDownload(records, now);
+  assert.strictEqual(result.filename, 'meet-transcript-2026-06-01-14-32.txt');
+  assert.ok(result.content.includes('# Meet transcript — 2026-06-01 14:32'));
+  assert.ok(result.content.includes('[00:00] Oleksii Kuzmenko: hello'));
+});

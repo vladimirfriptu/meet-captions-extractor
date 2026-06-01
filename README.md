@@ -13,10 +13,11 @@ downloads them as a plain-text transcript for analysis.
 
 1. Join a Google Meet call and turn on captions (CC). Recording starts
    automatically.
-2. Click the extension icon in the toolbar to open the popup — it shows the
-   latest recorded lines and updates live while open.
-3. Press **Download .txt** to save `meet-transcript-<timestamp>.txt`.
-4. Press **Clear** to reset the buffer before a new call.
+2. While captions are on, a **CC ⬇ (N)** button appears in the Meet control
+   bar next to the captions button — `N` is the number of recorded lines.
+   Click it to download `meet-transcript-<timestamp>.txt` directly.
+3. The extension icon in the toolbar opens a popup with a live preview of the
+   latest lines, plus **Download .txt** and **Clear** (reset before a new call).
 
 ## Notes
 
